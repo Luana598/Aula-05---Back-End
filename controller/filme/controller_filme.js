@@ -13,10 +13,10 @@ const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
 // Retorna uma lista de todos os filmes
 const listarFilmes = async function () {
 
-    try {
-        //criando um novo objeto para modificar a mensagem padrão
-        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+   //criando um novo objeto para modificar a mensagem padrão
+   let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
+    try {
         //chama a função do DAO para retornar a lista de filmes do BD
         let resultFilmes = await filmeDAO.getSelectAllMovies()
 
@@ -45,11 +45,10 @@ const listarFilmes = async function () {
 
 //encontra um filme pelo ID
 const buscarFilmeID = async function (id) {
+     //criando um novo objeto para modificar a mensagem padrão
+     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
-        //criando um novo objeto para modificar a mensagem padrão
-        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
-
         //VAlidação da chegada do ID
         if (!isNaN(id)) {
             let resultFilmes = await filmeDAO.getSelectMoviesById(Number(id))
