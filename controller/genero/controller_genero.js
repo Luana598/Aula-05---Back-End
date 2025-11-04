@@ -189,9 +189,54 @@ const atualizarGenero = async function (genero, id, contentType) {
 
 }
 
+//Exclui um genero buscando pelo ID
+const excluirGenero = async function(id){
+    //Criando um objeto novo para as mensagens
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+
+        //Validação da chegada do ID
+        if(!isNaN(id) && id != '' && id != null && id > 0){
+
+            //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
+            let validarId = await buscarGeneroID(id)
+
+            if(validarId.status_code == 200){
+
+                let resultGeneros = await generoDAO.setDeleteGender(Number(id))
+
+                if(resultGeneros){
+
+                    MESSAGES.DEFAULT_HEADER.status          = DEFAULT_MESSAGES.SUCCESS_DELETED_ITEM.status
+                    MESSAGES.DEFAULT_HEADER.status_code     = DEFAULT_MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                    MESSAGES.DEFAULT_HEADER.message         = DEFAULT_MESSAGES.SUCCESS_DELETED_ITEM.message
+
+                    return MESSAGES.DEFAULT_HEADER //200
+                    
+                }else{
+                    return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                }
+            }else{
+                return MESSAGES.ERROR_NOT_FOUND //404
+            }
+        }else{
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [id incorreto]'
+            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+        }
+
+    } catch (error) {
+        //console.log(error)
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
+
+
 module.exports = {
     listarGeneros,
     buscarGeneroID,
     inserirGenero,
-    atualizarGenero
+    atualizarGenero,
+    excluirGenero
 }
