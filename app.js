@@ -34,6 +34,7 @@ app.use((request, response, next) => {
 const controllerFilme = require('./controller/filme/controller_filme.js') 
 const controllerGenero = require('./controller/genero/controller_genero.js') 
 const controllerProdutora = require('./controller/produtora/controller_produtora.js') 
+const controllerAtores = require('./controller/ator/controller_atores.js')
 
 //ENDPOINTS
 
@@ -186,6 +187,71 @@ app.delete('/v1/locadora/genero/:id', cors(), async function (request, response)
 
     response.status(genero.status_code)
     response.json(genero)
+})
+
+
+//Endpoints para as rotas de atores
+
+//Função 01 - retorna a lista de atores
+app.get('/v1/locadora/atores', cors(), async function (request, response) {
+    //Chama a função para listar atores do banco de dados
+    let atores = await controllerAtores.listarAtores()
+    response.status(atores.status_code)
+    response.json(atores)
+})
+
+//Função 02 - retorna o ator filtrando pelo id
+app.get('/v1/locadora/atores/:id', cors(), async function (request, response) {
+    //Recebe o id encaminhado via parâmetro na requisição
+    let idAtores = request.params.id
+
+    //Chama a função para listar atores do banco de dados
+    let atores = await controllerAtores.buscarAtorId(idAtores)
+    response.status(atores.status_code)
+    response.json(atores)
+})
+
+//Funçaõ 03 - insere um novo ator
+app.post('/v1/locadora/atores', cors(), bodyParserJSON, async function (request, response) {
+    //Recebe os dados do body da requisição (Se voce utilizar o bodyparse, é obrigatório ter no endpoint)
+    let dadosBody = request.body
+
+    //Recebe o tipo de dados da requisição (JSON, XML ou outros formatos)
+    let contentType = request.headers['content-type']
+
+    //Chama a função da controller para inserir no atores, encaminha os dados e o content-type
+    let atores = await controllerAtores.inserirAtor(dadosBody, contentType)
+
+    response.status(atores.status_code)
+    response.json(atores)
+})
+
+//Função 04 - atualiza um ator existente
+app.put('/v1/locadora/atores/:id', cors(), bodyParserJSON, async function (request, response) {
+    //Recebe o id do ator
+    let idAtores = request.params.id
+
+    //Recebe os dados do body da requisição (Se voce utilizar o bodyparse, é obrigatório ter no endpoint)
+    let dadosBody = request.body
+
+    //Recebe o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Chama a função da controller para atualizar no ator, encaminha os dados e o content-type
+    let atores = await controllerAtores.atualizarAtor(dadosBody, idAtores, contentType)
+
+    response.status(atores.status_code)
+    response.json(atores)
+})
+
+//Função 05 - exclui um ator existente
+app.delete('/v1/locadora/atores/:id', cors(), async function (request, response) {
+    let idAtores = request.params.id
+
+    let atores = await controllerAtores.excluirAtor(idAtores)
+
+    response.status(atores.status_code)
+    response.json(atores)
 })
 
 //Endpoints para as rotas de produtoras

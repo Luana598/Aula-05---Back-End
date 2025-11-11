@@ -10,6 +10,9 @@ const filmeDAO = require('../../model/DAO/filme.js')
 //Import do arquivos de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
 
+//Import da controller de relação entre filme e gênero
+const controllerFilmeGenero = require('./controller_filme_genero.js')
+
 // Retorna uma lista de todos os filmes
 const listarFilmes = async function () {
 
@@ -52,13 +55,16 @@ const buscarFilmeID = async function (id) {
         //VAlidação da chegada do ID
         if (!isNaN(id) && id != '' && id != null && id > 0) {
             let resultFilmes = await filmeDAO.getSelectMoviesById(Number(id))
+            console.log(resultFilmes)
 
             if (resultFilmes) {
+                
                 if (resultFilmes.length > 0) {
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.items.filme = resultFilmes
+          
 
                     return MESSAGES.DEFAULT_HEADER //200
 
@@ -103,12 +109,39 @@ const inserirFilme = async function (filme, contentType) {
                     //Chama a função para receber o ID gerado no Banco
                     let lastID = await filmeDAO.getSelectLastId()
 
+                    
                     if (lastID) {
 
+                          //Processar a inserção de dados na tabela de relação entre filme e gênero
+                          //entre filme e Gênero
+
+                          //subsituindo forEach por forOf para respeitar o tempo do async e retornar os nomes e IDs dos
+                          for(genero of filme.genero){
+                          //filme.genero.forEach(async function(genero){
+                            let filmeGenero = {id_filme: lastID, id_genero: genero.id}
+
+                            //Encaminha o JSON com o ID do filme e do gênero para a controller FilmeGenero
+                            let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+                            //console.log(resultFilmeGenero)
+
+                            if(resultFilmeGenero.status_code != 201)
+                                return MESSAGES.ERROR_RELATIONAL_INSERTION //500 Problema na tabela de relacionamento
+                        }
+
+                        //Adiciona o id no json com os dados do filme
                         filme.id = lastID
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+
+                        //Adicionar no JSON os dados do GENERO
+                        delete filme.genero
+
+                        let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastID)
+                        //console.log(resultDadosGeneros.items.filme_genero)
+                        
+                        filme.genero = resultDadosGeneros.items.filmes_genero
+                        //
                         MESSAGES.DEFAULT_HEADER.items = filme
 
                         return MESSAGES.DEFAULT_HEADER //201
@@ -129,6 +162,7 @@ const inserirFilme = async function (filme, contentType) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
