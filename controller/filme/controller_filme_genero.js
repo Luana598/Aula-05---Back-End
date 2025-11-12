@@ -1,7 +1,7 @@
 /********************************************************************************************************
 * Objetivo: Arquivo responsável pela manipulação e dados entre o app e a model para o crud na relação entre filme e gênero.
 * Data: 05/11/2025
-* Autor: Rebeca Gomes
+* Autor: Luana Mariana Lopes Bomfim
 * Versão: 1.0
 *********************************************************************************************************/
 

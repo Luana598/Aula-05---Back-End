@@ -27,6 +27,15 @@ const listarFilmes = async function () {
 
             if (resultFilmes.length > 0) {
 
+                //Processamento para adicionar os gêneros aos filmes
+                for (filme of resultFilmes){
+                    let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.filme_id)
+
+                    if (resultGeneros.status_code == 200)
+                       filme.genero = resultGeneros.items.filmes_genero
+                }
+                //
+
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.items.filmes = resultFilmes
@@ -55,11 +64,17 @@ const buscarFilmeID = async function (id) {
         //VAlidação da chegada do ID
         if (!isNaN(id) && id != '' && id != null && id > 0) {
             let resultFilmes = await filmeDAO.getSelectMoviesById(Number(id))
-            console.log(resultFilmes)
 
             if (resultFilmes) {
                 
                 if (resultFilmes.length > 0) {
+
+                    for (filme of resultFilmes){
+                        let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.filme_id)
+    
+                        if (resultGeneros.status_code == 200)
+                           filme.genero = resultGeneros.items.filmes_genero
+                    }
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code

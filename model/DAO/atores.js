@@ -125,12 +125,12 @@ const setDeleteActors = async function (id) {
 const getSelectLastId = async function(){
     try {
         //Script sql para retornar apenas o último id do banco
-        let sql = `select ator_id from tbl_atores order by ator_id desc limit 1`
+        let sql = `select ator_id from tbl_atores order by ator_id desc limit 1;`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result))
-            return Number(result[0].id_atores)
+            return Number(result[0].ator_id)
         else
             return false
 

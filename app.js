@@ -33,7 +33,6 @@ app.use((request, response, next) => {
 //Import das contollers
 const controllerFilme = require('./controller/filme/controller_filme.js') 
 const controllerGenero = require('./controller/genero/controller_genero.js') 
-const controllerProdutora = require('./controller/produtora/controller_produtora.js') 
 const controllerAtores = require('./controller/ator/controller_atores.js')
 
 //ENDPOINTS
@@ -253,44 +252,6 @@ app.delete('/v1/locadora/atores/:id', cors(), async function (request, response)
     response.status(atores.status_code)
     response.json(atores)
 })
-
-//Endpoints para as rotas de produtoras
-
-//Função 01 - retorna a lista de produtoras
-app.get('/v1/locadora/produtoras', cors(), async function (request, response) {
-    //Chama a função para listar produtoras do banco de dados
-    let produtoras = await controllerProdutora.listarProdutora()
-    response.status(produtoras.status_code)
-    response.json(produtoras)
-})
-
-//Função 02 - retorna a produtora filtrando pelo id
-app.get('/v1/locadora/produtora/:id', cors(), async function (request, response) {
-    //Recebe o id encaminhado via parâmetro na requisição
-    let idProdutoras = request.params.id
-
-    //Chama a função para listar diretores do banco de dados
-    let produtoras = await controllerProdutora.buscarProdutoraId(idProdutoras)
-    response.status(produtoras.status_code)
-    response.json(produtoras)
-})
-
-//Funçaõ 03 - insere uma nova produtora
-app.post('/v1/locadora/produtoras', cors(), bodyParserJSON, async function (request, response) {
-    //Recebe os dados do body da requisição (Se voce utilizar o bodyparse, é obrigatório ter no endpoint)
-    let dadosBody = request.body
-
-    //Recebe o tipo de dados da requisição (JSON, XML ou outros formatos)
-    let contentType = request.headers['content-type']
-
-    //Chama a função da controller para inserir na produtora, encaminha os dados e o content-type
-    let produtoras = await controllerProdutora.inserirProdutora(dadosBody, contentType)
-
-    response.status(produtoras.status_code)
-    response.json(produtoras)
-})
-
-
 
 //Start na API
 app.listen(PORT, function(){
