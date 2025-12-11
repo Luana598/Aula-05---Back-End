@@ -1,7 +1,7 @@
 /****************************************************************************************
 * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao relacionamento entre filme e gênero.
 * Data: 05/10/2025
-* Autor: Rebeca Gomes
+* Autor: Luana M. Lopes Bomfim
 * Versão: 1.0
 *****************************************************************************************/
 
@@ -128,7 +128,6 @@ const setInsertMoviesGenres = async function (filmeGenero) {
 
         let result = await prisma.$executeRawUnsafe(sql)
 
-        console.log(result)
         if (result)
             return true
         else
@@ -164,13 +163,13 @@ const setUpdateMoviesGenres = async function (filmeGenero) {
 }
 
 //Exclui um genero pelo id no banco de dados
-const setDeleteMoviesGenres = async function (id) {
+const setDeleteMoviesGenres = async function (id_filme) {
     try {
-        let sql = `delete from tbl_filme_genero where id = ${id}`
+        let sql = `delete from tbl_filme_genero where filme_id = ${id_filme}`
 
-        let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
-        if(Array.isArray(result))
+        if(result)
             return result
         else
             return false

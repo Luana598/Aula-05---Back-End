@@ -1,7 +1,7 @@
 /****************************************************************************************
 * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente aos atores.
 * Data: 04/11/2025
-* Autor: Rebeca Gomes
+* Autor: Luana M. Lopes Bomfim
 * Versão: 1.0
 *****************************************************************************************/
 

@@ -16,6 +16,9 @@ const bodyParserJSON = bodyParser.json()
 //criando uma instância de uma classe do express
 const app = express()
 
+// Faz o node conseguir ler variaves presentes no arquivo .env
+require('dotenv').config();
+
 //retorna a porta do servidor atual ou colocamos uma porta local
 const PORT = process.PORT || 8080
 
@@ -29,229 +32,24 @@ app.use((request, response, next) => {
     next() 
 })
 
+// Import das rotas
+const classificationRoute = require('./router/routes_classificacao.js')
+const actorRoute = require('./router/routes_ator.js')
+const movieRoute = require('./router/routes_filme.js')
+const genderRoute = require('./router/routes_genero.js')
+
+// ENDPOINT's
+// FILME
+app.use('/v1/locadora/filme/', cors(), bodyParserJSON, movieRoute)
+// CLASSIFICACAO
+app.use('/v1/locadora/classificacao/', cors(), bodyParserJSON, classificationRoute)
+// ATORES
+app.use('/v1/locadora/atores/', cors(), bodyParserJSON,  actorRoute)
+//GENERO
+app.use('/v1/locadora/genero/', cors(), bodyParserJSON,  genderRoute)
 
-//Import das contollers
-const controllerFilme = require('./controller/filme/controller_filme.js') 
-const controllerGenero = require('./controller/genero/controller_genero.js') 
-const controllerAtores = require('./controller/ator/controller_atores.js')
 
-//ENDPOINTS
 
-//função 01 - lista todos os filmes
-app.get('/v1/locadora/filme', cors(), async function(request, response){
-
-    //chama a função para listar os filmes do DB
-    let filme =  await controllerFilme.listarFilmes()
-
-    response.status(filme.status_code)
-
-    response.json(filme)
-})
-
-//função 02 - filtra um filme pelo ID
-app.get('/v1/locadora/filme/:id', cors(), async function(request, response){
-
-    let idFilme = request.params.id
-
-    //chama a função para listar os filmes do DB
-    let filme =  await controllerFilme.buscarFilmeID(idFilme)
-
-    response.status(filme.status_code)
-
-    response.json(filme)
-})
-
-//função 03 - insere um novo filme
-app.post('/v1/locadora/filme', cors(), bodyParserJSON, async function(request, response){
-
-    //recebe os dados do corpo (body) da requisição
-    //---- se você utilizar o bodyParser, é obrigatório ter no endPoint----
-    let dadosBody = request.body
-    
-    //recebe o tipo de dados da requisição (JSON, XML, etc)
-    let contentType = request.headers['content-type']
-
-    //chama a função para inserir novos filmes do DB, encaminha os dados do body e o content-type
-    let filme =  await controllerFilme.inserirFilme(dadosBody, contentType)
-
-    response.status(filme.status_code)
-
-    response.json(filme)
-})
-
-//função 04 - atualiza um filme existente
-app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async function(request, response){
-
-    //recebe os dados do corpo (body) da requisição
-    //---- se você utilizar o bodyParser, é obrigatório ter no endPoint----
-    let dadosBody = request.body
-    //recebe o id do filme
-    let idFilme = request.params.id
-    //recebe o tipo de dados da requisição (JSON, XML, etc)
-    let contentType = request.headers['content-type']
-
-
-    //chama a função para atualizar filmes do DB, encaminha os dados do body, do id e o content-type
-    let filme =  await controllerFilme.atualizarFilme(dadosBody, idFilme, contentType)
-
-    response.status(filme.status_code)
-
-    response.json(filme)
-})
-
-//função 05 - deletar filmes
-app.delete('/v1/locadora/filme/:id', cors(), async function(request, response){
-
-    //recebe o id do filme
-    let idFilme = request.params.id 
-
-    //chama a função para listar os filmes do DB
-    let filme =  await controllerFilme.excluirFilme(idFilme)
-
-    response.status(filme.status_code)
-
-    response.json(filme)
-})
-
-//end-points da tabela de Gêneros
-
-//função 01 - lista todos os generos
-app.get('/v1/locadora/generos', cors(), async function(request, response){
-
-    //chama a função para listar os filmes do DB
-    let genero =  await controllerGenero.listarGeneros()
-
-    response.status(genero.status_code)
-
-    response.json(genero)
-
-})
-
-//função 02 - filtra um genero pelo ID
-app.get('/v1/locadora/genero/:id', cors(), async function(request, response){
-
-    let idGenero = request.params.id
-
-    //chama a função para listar os filmes do DB
-    let genero =  await controllerGenero.buscarGeneroID(idGenero)
-
-    response.status(genero.status_code)
-
-    response.json(genero)
-})
-
-//função 03 - insere um novo genero
-app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function(request, response){
-
-    //recebe os dados do corpo (body) da requisição
-    //---- se você utilizar o bodyParser, é obrigatório ter no endPoint----
-    let dadosBody = request.body
-    
-    //recebe o tipo de dados da requisição (JSON, XML, etc)
-    let contentType = request.headers['content-type']
-
-    //chama a função para inserir novos filmes do DB, encaminha os dados do body e o content-type
-    let genero =  await controllerGenero.inserirGenero(dadosBody, contentType)
-
-    response.status(genero.status_code)
-
-    response.json(genero)
-})
-
-//função 04 - atualiza um genero existente
-app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function(request, response){
-
-    //recebe os dados do corpo (body) da requisição
-    //---- se você utilizar o bodyParser, é obrigatório ter no endPoint----
-    let dadosBody = request.body
-    //recebe o id do filme
-    let idGenero = request.params.id
-    //recebe o tipo de dados da requisição (JSON, XML, etc)
-    let contentType = request.headers['content-type']
-
-
-    //chama a função para atualizar generos do DB, encaminha os dados do body, do id e o content-type
-    let genero =  await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
-
-    response.status(genero.status_code)
-
-    response.json(genero)
-})
-
-//Função 05 - exclui um gênero existente
-app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
-    let idGenero = request.params.id
-
-    let genero = await controllerGenero.excluirGenero(idGenero)
-
-    response.status(genero.status_code)
-    response.json(genero)
-})
-
-
-//Endpoints para as rotas de atores
-
-//Função 01 - retorna a lista de atores
-app.get('/v1/locadora/atores', cors(), async function (request, response) {
-    //Chama a função para listar atores do banco de dados
-    let atores = await controllerAtores.listarAtores()
-    response.status(atores.status_code)
-    response.json(atores)
-})
-
-//Função 02 - retorna o ator filtrando pelo id
-app.get('/v1/locadora/atores/:id', cors(), async function (request, response) {
-    //Recebe o id encaminhado via parâmetro na requisição
-    let idAtores = request.params.id
-
-    //Chama a função para listar atores do banco de dados
-    let atores = await controllerAtores.buscarAtorId(idAtores)
-    response.status(atores.status_code)
-    response.json(atores)
-})
-
-//Funçaõ 03 - insere um novo ator
-app.post('/v1/locadora/atores', cors(), bodyParserJSON, async function (request, response) {
-    //Recebe os dados do body da requisição (Se voce utilizar o bodyparse, é obrigatório ter no endpoint)
-    let dadosBody = request.body
-
-    //Recebe o tipo de dados da requisição (JSON, XML ou outros formatos)
-    let contentType = request.headers['content-type']
-
-    //Chama a função da controller para inserir no atores, encaminha os dados e o content-type
-    let atores = await controllerAtores.inserirAtor(dadosBody, contentType)
-
-    response.status(atores.status_code)
-    response.json(atores)
-})
-
-//Função 04 - atualiza um ator existente
-app.put('/v1/locadora/atores/:id', cors(), bodyParserJSON, async function (request, response) {
-    //Recebe o id do ator
-    let idAtores = request.params.id
-
-    //Recebe os dados do body da requisição (Se voce utilizar o bodyparse, é obrigatório ter no endpoint)
-    let dadosBody = request.body
-
-    //Recebe o tipo de dados da requisição
-    let contentType = request.headers['content-type']
-
-    //Chama a função da controller para atualizar no ator, encaminha os dados e o content-type
-    let atores = await controllerAtores.atualizarAtor(dadosBody, idAtores, contentType)
-
-    response.status(atores.status_code)
-    response.json(atores)
-})
-
-//Função 05 - exclui um ator existente
-app.delete('/v1/locadora/atores/:id', cors(), async function (request, response) {
-    let idAtores = request.params.id
-
-    let atores = await controllerAtores.excluirAtor(idAtores)
-
-    response.status(atores.status_code)
-    response.json(atores)
-})
 
 //Start na API
 app.listen(PORT, function(){

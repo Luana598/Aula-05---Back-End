@@ -4,6 +4,8 @@
 * Autor: Luana Mariana Lopes Bomfim
 * Versão: 1.0
 *********************************************************************************************************/
+const { PrismaClient } = require('../../generated/prisma');
+const prisma = new PrismaClient();
 
 //Retorna todos os filmes e atores cadastrados no banco de dados
 const getSelectAllMoviesActors = async function () {
@@ -47,15 +49,15 @@ const getSelectByIdMovieActors = async function (id) {
 const getSelectActorsByIdMovies = async function (id_filme) {
     try {
         //Script SQL
-        let sql = `select tbl_atores.ator_id, tbl_atores.nome
+        let sql = `select tbl_ator.ator_id, tbl_ator.nome
                     from tbl_filme
                         inner join tbl_filme_ator
                             on tbl_filme.filme_id = tbl_filme_ator.filme_id
-                        inner join tbl_atores
-                            on tbl_atores.ator_id = tbl_filme_ator.ator_id
+                        inner join tbl_ator
+                            on tbl_ator.ator_id = tbl_filme_ator.ator_id
                     where tbl_filme.filme_id =${id_filme}`
 
-                    //console.log(sql)
+                    //
 
 
         //Encaminha para o banco de dados o script SQL
@@ -66,7 +68,7 @@ const getSelectActorsByIdMovies = async function (id_filme) {
         elses
         return false
     } catch (error) {
-        //console.log(error)
+        console.log(error)
         return false
     }
 }
@@ -118,16 +120,17 @@ const getSelectLastId = async function(){
 const setInsertMovieActors = async function (filmeAtor) {
     try {
         let sql = `INSERT INTO tbl_filme_ator (filme_id, ator_id)
-                    VALUES (${filmeAtor.id_filme}, ${filmeAtor.id_genero})`
+                    VALUES (${filmeAtor.id_filme}, ${filmeAtor.id_ator})`
 
         let result = await prisma.$executeRawUnsafe(sql)
+        
         if (result)
             return true
         else
             return false
 
     } catch (error) {
-        //console.log(error)
+    
         return false
     }
 }
@@ -136,9 +139,9 @@ const setInsertMovieActors = async function (filmeAtor) {
 const setUpdateMovieActors = async function (filmeAtor) {
     try {
 
-        let sql = `update tbl_filme_genero set 
+        let sql = `update tbl_filme_ator set 
                         filme_id = ${filmeAtor.id_filme}, 
-                        genero_id = ${filmeAtor.id_genero} 
+                        genero_id = ${filmeAtor.id_ator} 
                     where id = ${filmeAtor.id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -155,14 +158,14 @@ const setUpdateMovieActors = async function (filmeAtor) {
 }
 
 //Exclui um relacionamento filme/ator pelo id no banco de dados
-const setDeleteMovieActors = async function (id) {
+const setDeleteMovieActors = async function (id_filme) {
     try {
-        let sql = `delete from tbl_filme_ator where id = ${id}`
+        let sql = `delete from tbl_filme_ator where filme_id = ${id_filme}`
 
-        let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
-        if(Array.isArray(result))
-            return result
+        if(result)
+            return true
         else
             return false
 

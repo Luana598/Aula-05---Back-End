@@ -1,11 +1,10 @@
 /********************************************************************************************************
 * Objetivo: Arquivo responsável pela manipulação e dados entre o app e a model para o crud de atores.
 * Data: 04/11/2025
-* Autor: Rebeca Gomes
+* Autor: Luana M. Lopes Bomfim
 * Versão: 1.0
 *********************************************************************************************************/
 
-//Import da model do DAO do filme
 const { Prisma } = require('@prisma/client')
 const atoresDAO = require('../../model/DAO/atores.js')
 

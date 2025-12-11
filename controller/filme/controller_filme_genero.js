@@ -248,11 +248,6 @@ const excluirFilmeGenero = async function(id){
         //Validação da chegada do ID
         if(!isNaN(id) && id != '' && id != null && id > 0){
 
-            //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarId = await buscarFilmeGeneroId(id)
-
-            if(validarId.status_code == 200){
-
                 let resultFilmesGeneros = await filmeGeneroDAO.setDeleteMoviesGenres(Number(id))
 
                 if(resultFilmesGeneros){
@@ -267,9 +262,6 @@ const excluirFilmeGenero = async function(id){
                 }else{
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
-            }else{
-                return MESSAGES.ERROR_NOT_FOUND //404
-            }
         }else{
             MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [id incorreto]'
             return MESSAGES.ERROR_REQUIRED_FIELDS //400

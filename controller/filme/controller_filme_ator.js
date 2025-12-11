@@ -79,8 +79,7 @@ const listarAtoresIdFilme = async function (idFilme) {
         //Validação do ID
         if (!isNaN(idFilme) && idFilme != '' && idFilme != null && idFilme > 0) {
             let resultFilmesAtores = await filmeAtorDAO.getSelectActorsByIdMovies(Number(idFilme))
-           // console.log(resultFilmesAtores)
-
+          
             if (resultFilmesAtores) {
                 if (resultFilmesAtores.length > 0) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
@@ -153,7 +152,7 @@ const inserirFilmeAtor = async function (filmeAtor, contentType) {
                 //Processamento
                 //Chama a função para inserir um novo filme no banco de dados
                 let resultFilmesAtores = await filmeAtorDAO.setInsertMovieActors(filmeAtor)
-
+               
                 if (resultFilmesAtores) {
 
                     //Chama a função para receber o id gerado no banco de dados
@@ -246,11 +245,6 @@ const excluirFilmeAtor = async function(id){
         //Validação da chegada do ID
         if(!isNaN(id) && id != '' && id != null && id > 0){
 
-            //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarId = await buscarFilmeAtorId(id)
-
-            if(validarId.status_code == 200){
-
                 let resultFilmesAtores = await filmeAtorDAO.setDeleteMovieActors(Number(id))
 
                 if(resultFilmesAtores){
@@ -265,9 +259,6 @@ const excluirFilmeAtor = async function(id){
                 }else{
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
-            }else{
-                return MESSAGES.ERROR_NOT_FOUND //404
-            }
         }else{
             MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [id incorreto]'
             return MESSAGES.ERROR_REQUIRED_FIELDS //400
