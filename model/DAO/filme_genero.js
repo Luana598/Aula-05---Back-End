@@ -127,13 +127,15 @@ const setInsertMoviesGenres = async function (filmeGenero) {
                     VALUES (${filmeGenero.id_filme}, ${filmeGenero.id_genero})`
 
         let result = await prisma.$executeRawUnsafe(sql)
+
+        console.log(result)
         if (result)
             return true
         else
             return false
 
     } catch (error) {
-        //console.log(error)
+        console.log(error)
         return false
     }
 }

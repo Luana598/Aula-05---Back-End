@@ -130,6 +130,7 @@ SHOW TRIGGERS;
 
  select * from tbl_filme;
   select * from tbl_atores;
+  
 CREATE TABLE tbl_filme_ator (
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	filme_id INT NOT NULL,

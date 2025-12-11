@@ -30,7 +30,12 @@ const listarFilmes = async function () {
                 //Processamento para adicionar os gêneros aos filmes
                 for (filme of resultFilmes){
                     let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.filme_id)
+                    
+                    if (resultGeneros.status_code == 200)
+                       filme.genero = resultGeneros.items.filmes_genero
 
+                    let resultAtores = await controllerFilmeGenero.listarGenerosIdFilme(filme.filme_id)
+                    
                     if (resultGeneros.status_code == 200)
                        filme.genero = resultGeneros.items.filmes_genero
                 }
@@ -132,12 +137,11 @@ const inserirFilme = async function (filme, contentType) {
 
                           //subsituindo forEach por forOf para respeitar o tempo do async e retornar os nomes e IDs dos
                           for(genero of filme.genero){
-                          //filme.genero.forEach(async function(genero){
+
                             let filmeGenero = {id_filme: lastID, id_genero: genero.id}
 
                             //Encaminha o JSON com o ID do filme e do gênero para a controller FilmeGenero
                             let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
-                            //console.log(resultFilmeGenero)
 
                             if(resultFilmeGenero.status_code != 201)
                                 return MESSAGES.ERROR_RELATIONAL_INSERTION //500 Problema na tabela de relacionamento

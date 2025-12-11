@@ -16,7 +16,7 @@ const prisma = new PrismaClient()
 const getSelectAllActors = async function () {
     try {
         //Script SQL
-        let sql = `select * from tbl_atores order by ator_id desc`
+        let sql = `select * from tbl_ator order by ator_id desc`
 
         //Encaminha para o banco de dados o script SQL
         let result = await prisma.$queryRawUnsafe(sql)
@@ -35,7 +35,7 @@ const getSelectAllActors = async function () {
 const getActorById = async function (id) {
     try {
         //Script SQL
-        let sql = `select * from tbl_atores where ator_id=${id}`
+        let sql = `select * from tbl_ator where ator_id=${id}`
 
         //Encaminha para o banco de dados o script SQL
         let result = await prisma.$queryRawUnsafe(sql)
@@ -52,7 +52,7 @@ const getActorById = async function (id) {
 //Insere um ator novo no banco de dados
 const setInsertActors = async function (ator) {
     try {
-        let sql = `INSERT INTO tbl_atores (nome, 
+        let sql = `INSERT INTO tbl_ator (nome, 
                         nome_artistico, 
                         data_nascimento, 
                         nacionalidade, 
@@ -80,7 +80,7 @@ const setInsertActors = async function (ator) {
 const setUpdateActors = async function (ator) {
     try {
 
-        let sql = `update tbl_atores set
+        let sql = `update tbl_ator set
                         nome                = '${ator.nome}', 
                         nome_artistico      = '${ator.nome_artistico}', 
                         data_nascimento     = '${ator.data_nascimento}', 
@@ -106,7 +106,7 @@ const setUpdateActors = async function (ator) {
 //Exclui um ator pelo id no banco de dados
 const setDeleteActors = async function (id) {
     try {
-        let sql = `delete from tbl_atores where ator_id = ${id}`
+        let sql = `delete from tbl_ator where ator_id = ${id}`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
@@ -125,7 +125,7 @@ const setDeleteActors = async function (id) {
 const getSelectLastId = async function(){
     try {
         //Script sql para retornar apenas o último id do banco
-        let sql = `select ator_id from tbl_atores order by ator_id desc limit 1;`
+        let sql = `select ator_id from tbl_ator order by ator_id desc limit 1;`
 
         let result = await prisma.$queryRawUnsafe(sql)
 

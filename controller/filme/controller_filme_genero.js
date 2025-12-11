@@ -106,7 +106,7 @@ const listarGenerosIdFilme = async function (idFilme) {
     }
 }
 
-//Retorna um gênero filtrando pelo filme
+//Retorna um filme filtrando pelo gênero
 const listarFilmesIdGeneros = async function (idGenero) {
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))

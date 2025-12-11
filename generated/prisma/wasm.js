@@ -121,7 +121,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\25132776\\Desktop\\Turma DS2M - Back End\\Aula_05_Marcel\\generated\\prisma",
+      "value": "C:\\Users\\maria\\OneDrive\\Desktop\\Back-End - DS2M\\Aula-05---Back-End\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -135,7 +135,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\25132776\\Desktop\\Turma DS2M - Back End\\Aula_05_Marcel\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\maria\\OneDrive\\Desktop\\Back-End - DS2M\\Aula-05---Back-End\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
