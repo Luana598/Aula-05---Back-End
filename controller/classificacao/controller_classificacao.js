@@ -54,7 +54,7 @@ const buscarClassificacaoId = async function (id) {
                 if (resultClassificacao.length > 0) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.response.classificacao = resultClassificacao
+                    MESSAGES.DEFAULT_HEADER.items.classificacao = resultClassificacao
 
                     return MESSAGES.DEFAULT_HEADER
                 } else {
@@ -68,6 +68,7 @@ const buscarClassificacaoId = async function (id) {
             return MESSAGES.ERROR_REQUIRED_FIELDS // 400
         }
     } catch (error) {
+        
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -96,10 +97,10 @@ const inserirClassificacao = async function (classificacao, contentType) {
                         //Adiciona o ID no JSON de dados da classificacao
                         classificacao.classificacao_id = lastId
 
-                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATE_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATE_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATE_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.response = classificacao
+                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
+                        MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message
+                        MESSAGES.DEFAULT_HEADER.items = classificacao
 
                         return MESSAGES.DEFAULT_HEADER //201
                     } else {
@@ -115,6 +116,7 @@ const inserirClassificacao = async function (classificacao, contentType) {
             return MESSAGES.ERROR_CONTENT_TYPE // 415
         }
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 }
@@ -150,7 +152,7 @@ const atualizarClassificacao = async function (classificacao, id, contentType) {
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.response.classificacao = classificacao
+                        MESSAGES.DEFAULT_HEADER.items.classificacao = classificacao
 
                         return MESSAGES.DEFAULT_HEADER //200
                     } else {
@@ -191,7 +193,7 @@ const excluirClassificacao = async function (id) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                     MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
-                    MESSAGES.DEFAULT_HEADER.response.classificacao = resultClassificacao
+                    MESSAGES.DEFAULT_HEADER.items.classificacao = resultClassificacao
 
                     delete MESSAGES.DEFAULT_HEADER.response
 

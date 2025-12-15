@@ -18,7 +18,7 @@ const controllerGenero = require('../controller/genero/controller_genero.js')
 
 
 //função 01 - lista todos os generos
-app.get('/v1/locadora/generos', cors(), async function(request, response){
+router.get('/', cors(), async function(request, response){
 
     //chama a função para listar os filmes do DB
     let genero =  await controllerGenero.listarGeneros()
@@ -30,7 +30,7 @@ app.get('/v1/locadora/generos', cors(), async function(request, response){
 })
 
 //função 02 - filtra um genero pelo ID
-app.get('/v1/locadora/genero/:id', cors(), async function(request, response){
+router.get('/:id', cors(), async function(request, response){
 
     let idGenero = request.params.id
 
@@ -43,7 +43,7 @@ app.get('/v1/locadora/genero/:id', cors(), async function(request, response){
 })
 
 //função 03 - insere um novo genero
-app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function(request, response){
+router.post('/', cors(), bodyParserJSON, async function(request, response){
 
     //recebe os dados do corpo (body) da requisição
     //---- se você utilizar o bodyParser, é obrigatório ter no endPoint----
@@ -61,7 +61,7 @@ app.post('/v1/locadora/genero', cors(), bodyParserJSON, async function(request, 
 })
 
 //função 04 - atualiza um genero existente
-app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function(request, response){
+router.put('/:id', cors(), bodyParserJSON, async function(request, response){
 
     //recebe os dados do corpo (body) da requisição
     //---- se você utilizar o bodyParser, é obrigatório ter no endPoint----
@@ -81,7 +81,7 @@ app.put('/v1/locadora/genero/:id', cors(), bodyParserJSON, async function(reques
 })
 
 //Função 05 - exclui um gênero existente
-app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
+router.delete('/:id', cors(), async function (request, response) {
     let idGenero = request.params.id
 
     let genero = await controllerGenero.excluirGenero(idGenero)
@@ -89,3 +89,5 @@ app.delete('/v1/locadora/genero/:id', cors(), async function (request, response)
     response.status(genero.status_code)
     response.json(genero)
 })
+
+module.exports = router;
