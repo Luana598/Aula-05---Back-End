@@ -37,6 +37,8 @@ const classificationRoute = require('./router/routes_classificacao.js')
 const actorRoute = require('./router/routes_ator.js')
 const movieRoute = require('./router/routes_filme.js')
 const genderRoute = require('./router/routes_genero.js')
+const directorRoute = require('./router/routes_diretor.js')
+
 
 // ENDPOINT's
 // FILME
@@ -47,6 +49,8 @@ app.use('/v1/locadora/classificacao/', cors(), bodyParserJSON, classificationRou
 app.use('/v1/locadora/atores/', cors(), bodyParserJSON,  actorRoute)
 //GENERO
 app.use('/v1/locadora/genero/', cors(), bodyParserJSON,  genderRoute)
+//DIRETOR
+app.use('/v1/locadora/diretor/', cors(), bodyParserJSON,  directorRoute)
 
 
 
